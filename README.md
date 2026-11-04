@@ -10,8 +10,9 @@ This program is intended to make filling out the timesheet a more user-friendly 
 - Considers the work categories based off the schedule provided in the top 2 rows
 - Asks the user to insert hours worked based off the categories
 - Prints out the breakdown of the timesheet at the end
+- Added more error handling for inserting the date
 
 ## Functions to implement
-- [ ] Handling for the year inserted when the user is asked to insert the start date
+- [x] Handling for the year inserted when the user is asked to insert the start date
 - [ ] The option to go back when inserting hours worked (To allow for typo correction)
 - [ ] Allowing universal compatability between timesheets as there are different versions of the timesheet
