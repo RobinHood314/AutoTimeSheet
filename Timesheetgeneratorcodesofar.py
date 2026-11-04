@@ -12,13 +12,16 @@ def getDate():
     today = datetime.datetime.now()
     thisYear = today.strftime('%Y')
     while True:
-        dateComponents = input('Enter the Start Date in MM-DD-YYYY Format:').split('-')
-        month, day, year = [int(item) for item in dateComponents]
-        if day == 1 or day == 16 and year == int(thisyear):
-            dateInCell = date(year, month, day)
-            break
-        else:
-            print('Invalid date, please try again.')
+        try:
+            dateComponents = input('Enter the Start Date in MM-DD-YYYY Format:').split('-')
+            month, day, year = [int(item) for item in dateComponents]
+            if (day == 1 or day == 16) and year == int(thisYear):
+                dateInCell = date(year, month, day)
+                break
+            else:
+                print('Invalid date, please try again.')
+        except ValueError:
+            continue
 
     return dateInCell
 
@@ -57,14 +60,16 @@ def fillTop():
         timesheet.cell(row=2, column=columnNum).value = input() 
 
 def verifyTop():
-    print('Is the below information correct? (y for yes, n for no)')
+    print()
     for columnNo in range(1,8):
         print(timesheet.cell(row=1, column=columnNo).value)
         print(timesheet.cell(row=2, column=columnNo).value)
         print('----------------------------')
 
-    correct = input()
+    print()
     while True:
+        print('Is the above information correct? (y for yes, n for no)')
+        correct = input()
         if correct == 'y':
             break
         elif correct == 'n':
@@ -143,10 +148,8 @@ def logHours():
                 print('Error: Undefined Day')
             
         print(date.strftime('%B %d, %Y') + ':')
-        for j in range(2, 10):
-            if date.strftime('%w') == 6:
-                continue
-
+        
+        for j in range(2,10):
             if j < 8:
                 if timesheet.cell(row=2, column=j).value == None:
                     continue
