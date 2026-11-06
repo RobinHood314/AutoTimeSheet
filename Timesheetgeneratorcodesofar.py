@@ -60,11 +60,13 @@ def fillTop():
         timesheet.cell(row=2, column=columnNum).value = input() 
 
 def verifyTop():
-    print()
-    for columnNo in range(1,8):
-        print(timesheet.cell(row=1, column=columnNo).value)
-        print(timesheet.cell(row=2, column=columnNo).value)
+    
+    endColumn = 1
+    while timesheet.cell(row=1, column=endColumn).value != None:
+        print(timesheet.cell(row=1, column=endColumn).value)
+        print(timesheet.cell(row=2, column=endColumn).value)
         print('----------------------------')
+        endColumn += 1
 
     print()
     while True:
@@ -77,6 +79,8 @@ def verifyTop():
             break
         else:
             print('Please enter y or n.')
+
+    return endColumn
 
 def fillDate():
     incDay = datetime.timedelta(days=1)
@@ -120,6 +124,7 @@ def fillDate():
     return endCell
 
 def logHours():
+    endColumn = verifyTop()
     endCell = fillDate()
     for i in range(6, endCell):
         date = timesheet.cell(row = i, column = 1).value
@@ -148,17 +153,38 @@ def logHours():
                 print('Error: Undefined Day')
             
         print(date.strftime('%B %d, %Y') + ':')
-        
-        for j in range(2,10):
-            if j < 8:
-                if timesheet.cell(row=2, column=j).value == None:
-                    continue
-            print('How many hours of ' + timesheet.cell(row=5, column=j).value + '?')
-            print('(Round to the nearest .25)')
-            timesheet.cell(row=i, column=j).value = input()
 
-        print('Any comments to add? (Leave blank if no)')
-        timesheet.cell(row=i, column=10).value = input()
+        j = 2
+        while timesheet.cell(row = 5, column = j).value != None:
+            if j < endColumn:
+                if timesheet.cell(row = 2, column = j).value == None:
+                    j += 1
+                    continue
+                
+            if timesheet.cell(row = 5, column = j).value == 'Comments':
+                commentColumn = j
+                print('Any comments to add? (Leave blank if no)')
+                timesheet.cell(row=i, column=j).value = input()
+                break
+            else:
+                print('Enter hours of ' + timesheet.cell(row=5, column=j).value)
+                print('(Round to the nearest .25)')
+                print('Press B to go back')
+                timesheet.cell(row=i, column=j).value = input()
+                if timesheet.cell(row = i, column = j).value == 'B' or timesheet.cell(row = i, column = j).value == 'b':
+                    j -= 1
+
+                    if j < endColumn:
+                        reincrement = 0
+                        while timesheet.cell(row = 2, column = j).value == None:
+                            j -= 1
+                            reincrement += 1
+
+                            if j == 1:
+                                j += reincrement
+
+                else:
+                    j += 1
 
     return endCell
 
@@ -179,7 +205,6 @@ def verifyHours():
     print('\n')
     print('Total Hours: ' + str(timesheet['K23'].value))
 
-
-verifyTop()
+print('\n \n')
 verifyHours()
 book.save('TimeSheet.xlsx')
