@@ -8,6 +8,16 @@ import sys
 book = openpyxl.load_workbook(filename='TimeSheet.xlsx', data_only=True)
 timesheet = book.active
 
+#Thanks, Lenie!
+def clearSheet():
+    endColumn = 2
+    while timesheet.cell(row = 5, column = endColumn).value != 'Total':
+        endColumn += 1
+
+    for Row in range(6,22):
+        for Column in range(2,endColumn):
+            timesheet.cell(row = Row, column = Column).value = None
+
 def getDate():
     today = datetime.datetime.now()
     thisYear = today.strftime('%Y')
@@ -206,5 +216,6 @@ def verifyHours():
     print('Total Hours: ' + str(timesheet['K23'].value))
 
 print('\n \n')
+clearSheet()
 verifyHours()
 book.save('TimeSheet.xlsx')
