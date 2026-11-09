@@ -2,6 +2,13 @@
 
 This program is intended to make filling out the timesheet a more user-friendly experience, as opposed to manually editing the Excel Spreadsheet
 
+## Instructions
+1. Fork this repository!
+   *git clone https://github.com/RobinHood314/AutoTimeSheet
+
+2. Copy your timesheet breakdown in the same folder as this program and name it TimeSheet.xlsx
+3. Have fun!
+
 ## List of Functions
 - Verifies the information on the top 2 rows and allows the user to change it if it's inaccurate
 - Automatic date updates (If the Date Column is filled out)
