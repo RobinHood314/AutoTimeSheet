@@ -14,5 +14,7 @@ This program is intended to make filling out the timesheet a more user-friendly 
 
 ## Functions to implement
 - [x] Handling for the year inserted when the user is asked to insert the start date
-- [ ] The option to go back when inserting hours worked (To allow for typo correction)
-- [ ] Allowing universal compatability between timesheets as there are different versions of the timesheet
+- [x] The option to go back when inserting hours worked (To allow for typo correction)*
+- [x] Allowing universal compatability between timesheets as there are different versions of the timesheet
+
+      *Will allow the user to go back within the day
