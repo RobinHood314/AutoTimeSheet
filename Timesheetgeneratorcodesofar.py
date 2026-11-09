@@ -76,6 +76,7 @@ def verifyTop():
         print(timesheet.cell(row=1, column=endColumn).value)
         print(timesheet.cell(row=2, column=endColumn).value)
         print('----------------------------')
+        print()
         endColumn += 1
 
     print()
@@ -136,6 +137,13 @@ def fillDate():
 def logHours():
     endColumn = verifyTop()
     endCell = fillDate()
+
+    startDate = timesheet['A6'].value
+    endDate = timesheet.cell(row = endCell - 1, column = 1).value
+
+    print('\nTimesheet from ' + startDate.strftime('%B %d, %Y') + ' to ' + endDate.strftime('%B %d, %Y'))
+    print()
+
     for i in range(6, endCell):
         date = timesheet.cell(row = i, column = 1).value
         match date.strftime('%w'):
@@ -174,8 +182,12 @@ def logHours():
             if timesheet.cell(row = 5, column = j).value == 'Comments':
                 commentColumn = j
                 print('Any comments to add? (Leave blank if no)')
+                print('Press B to go back')
                 timesheet.cell(row=i, column=j).value = input()
-                break
+                if timesheet.cell(row = i, column = j).value == 'B' or timesheet.cell(row = i, column = j).value == 'b':
+                    j -= 1
+                else:
+                    break
             else:
                 print('Enter hours of ' + timesheet.cell(row=5, column=j).value)
                 print('(Round to the nearest .25)')
@@ -192,9 +204,14 @@ def logHours():
 
                             if j == 1:
                                 j += reincrement
-
-                else:
+                elif timesheet.cell(row = i, column = j).value == '':
                     j += 1
+                else:
+                    try:
+                        float(timesheet.cell(row = i, column = j).value)
+                        j += 1
+                    except ValueError:
+                        print('Please enter a number')
 
     return endCell
 
