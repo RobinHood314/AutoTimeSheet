@@ -4,7 +4,7 @@ This program is intended to make filling out the timesheet a more user-friendly 
 
 ## Instructions
 1. Fork this repository!
-   *git clone https://github.com/RobinHood314/AutoTimeSheet
+   `git clone https://github.com/RobinHood314/AutoTimeSheet`
 
 2. Copy your timesheet breakdown in the same folder as this program and name it TimeSheet.xlsx
 3. Have fun!
