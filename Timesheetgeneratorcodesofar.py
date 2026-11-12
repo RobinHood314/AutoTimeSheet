@@ -5,7 +5,7 @@ from datetime import date
 import openpyxl
 import sys
 
-book = openpyxl.load_workbook(filename='TimeSheet.xlsx', data_only=True)
+book = openpyxl.load_workbook(filename='TimeSheet.xlsx')
 timesheet = book.active
 
 #Thanks, Lenie!
@@ -67,7 +67,9 @@ def fillTop():
     timesheet['A2'].value = input()
     for columnNum in range(2,8):
         print('Enter scheduled hours for ' + str(timesheet.cell(row=1, column=columnNum).value + ':' ))
-        timesheet.cell(row=2, column=columnNum).value = input() 
+        timesheet.cell(row=2, column=columnNum).value = input()
+        if timesheet.cell(row = 2, column = columnNum).value == '':
+            timesheet.cell(row = 2, column = columnNum).value = None
 
 def verifyTop():
     
@@ -144,7 +146,8 @@ def logHours():
     print('\nTimesheet from ' + startDate.strftime('%B %d, %Y') + ' to ' + endDate.strftime('%B %d, %Y'))
     print()
 
-    for i in range(6, endCell):
+    i = 6
+    while timesheet.cell(row = i, column = 1).value != None:
         date = timesheet.cell(row = i, column = 1).value
         match date.strftime('%w'):
             case '0':
@@ -166,6 +169,7 @@ def logHours():
                 print('Enter Hours Worked for', end=' ')
                 print('Friday', end=', ')
             case '6':
+                i += 1
                 continue
             case _:
                 print('Error: Undefined Day')
@@ -187,6 +191,7 @@ def logHours():
                 if timesheet.cell(row = i, column = j).value == 'B' or timesheet.cell(row = i, column = j).value == 'b':
                     j -= 1
                 else:
+                    i += 1
                     break
             else:
                 print('Enter hours of ' + timesheet.cell(row=5, column=j).value)
@@ -204,11 +209,12 @@ def logHours():
 
                             if j == 1:
                                 j += reincrement
+                
                 elif timesheet.cell(row = i, column = j).value == '':
                     j += 1
                 else:
                     try:
-                        float(timesheet.cell(row = i, column = j).value)
+                        timesheet.cell(row = i, column = j).value = float(timesheet.cell(row = i, column = j).value)
                         j += 1
                     except ValueError:
                         print('Please enter a number')
@@ -217,20 +223,27 @@ def logHours():
 
 def verifyHours():
     endCell = logHours()
+    totalHours = 0
     print('\n \n \n')
     print('Hours worked this pay period:')
     print('\n')
     for i in range(6, endCell):
         date = timesheet.cell(row=i, column=1).value
         print(date.strftime('%B %d, %Y' + ':'))
-        for j in range(2,12):
-            if timesheet.cell(row=i, column=j).value == None:
-                continue
+        dayHours = 0
+        for j in range(2,11):
+            if timesheet.cell(row = i, column = j).value != None:
+                try:
+                    dayHours += float(timesheet.cell(row = i, column = j).value)
+                    totalHours += float(timesheet.cell(row = i, column = j).value)
+                except ValueError:
+                    continue
             print('    ' + timesheet.cell(row=5, column=j).value + ': ' + str(timesheet.cell(row=i, column=j).value))
-        
+        print('Total: ' + str(dayHours))
         print('\n')
+
+    print('Total Hours this Pay Period: ' + str(totalHours))
     print('\n')
-    print('Total Hours: ' + str(timesheet['K23'].value))
 
 print('\n \n')
 clearSheet()
