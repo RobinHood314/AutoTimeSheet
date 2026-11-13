@@ -231,7 +231,7 @@ def verifyHours():
         date = timesheet.cell(row=i, column=1).value
         print(date.strftime('%B %d, %Y' + ':'))
         dayHours = 0
-        for j in range(2,11):
+        for j in range(2,10):
             if timesheet.cell(row = i, column = j).value != None:
                 try:
                     dayHours += float(timesheet.cell(row = i, column = j).value)
@@ -239,6 +239,7 @@ def verifyHours():
                 except ValueError:
                     continue
             print('    ' + timesheet.cell(row=5, column=j).value + ': ' + str(timesheet.cell(row=i, column=j).value))
+        print('\tComments: ' + str(timesheet.cell(row = i, column = 10).value))
         print('Total: ' + str(dayHours))
         print('\n')
 
